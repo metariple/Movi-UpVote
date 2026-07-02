@@ -11,7 +11,7 @@
 
   /* ОРИГИНАЛЬНАЯ связка Fraunces + Newsreader (возвращена по решению автора).
      Обе НЕ держат кириллицу → Georgia замыкает стек и рендерит русский текст.
-     Латиница (masthead "MoviUpVote") идёт в Fraunces — та самая "десятка".
+     Латиница (masthead "23 Films") идёт в Fraunces — та самая "десятка".
      Настоящий фикс кириллицы — отдельная задача (см. DESIGN.md / TODOS). */
   --font-display: var(--font-fraunces), Georgia, serif;
   --font-body: var(--font-newsreader), Georgia, serif;

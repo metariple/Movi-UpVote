@@ -14,7 +14,7 @@ export default function LoginPage() {
   return (
     <main className="wrap">
       <header className="masthead">
-        <h1>🎬 MoviUpVote</h1>
+        <h1>23 Films</h1>
         <p className="tag">Топ фильмов и сериалов нашей тусовки.</p>
       </header>
       <p style={{ color: "var(--muted)", marginBottom: 20 }}>

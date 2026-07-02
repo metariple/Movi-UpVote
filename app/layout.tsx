@@ -22,7 +22,7 @@ const newsreader = Newsreader({
 });
 
 export const metadata: Metadata = {
-  title: "MoviUpVote — топ нашей тусовки",
+  title: "23 Films — топ нашей тусовки",
   description: "Фильмы и сериалы, которые мы советуем друг другу. Голосуй, поднимай в топ.",
 };
 

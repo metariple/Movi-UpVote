@@ -4,7 +4,7 @@ export default function Error({ reset }: { error: Error & { digest?: string }; r
   return (
     <main className="wrap">
       <header className="masthead">
-        <h1>🎬 MoviUpVote</h1>
+        <h1>23 Films</h1>
       </header>
       <div className="error-banner">
         <p>Не удалось загрузить топ.</p>

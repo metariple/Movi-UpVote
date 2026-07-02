@@ -55,7 +55,7 @@ export default async function Home() {
       </div>
 
       <header className="masthead">
-        <h1>🎬 MoviUpVote</h1>
+        <h1>23 Films</h1>
         <p className="tag">Что смотрит наша тусовка. Голосуй — поднимай в топ.</p>
       </header>
 
