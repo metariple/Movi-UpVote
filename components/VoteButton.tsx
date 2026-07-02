@@ -6,17 +6,20 @@ import { createClient } from "@/lib/supabase/client";
 
 export function VoteButton({
   titleId,
+  titleName,
   initialCount,
   initialVoted,
   loggedIn,
 }: {
   titleId: number;
+  titleName: string;
   initialCount: number;
   initialVoted: boolean;
   loggedIn: boolean;
 }) {
   const [count, setCount] = useState(initialCount);
   const [voted, setVoted] = useState(initialVoted);
+  const [flashError, setFlashError] = useState(false);
   const [pending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -46,9 +49,11 @@ export function VoteButton({
           .eq("title_id", titleId);
 
     if (error) {
-      // Откат оптимистичного апдейта.
+      // Откат оптимистичного апдейта + короткая визуальная вспышка ошибки.
       setVoted(!nextVoted);
       setCount((c) => c + (nextVoted ? -1 : 1));
+      setFlashError(true);
+      setTimeout(() => setFlashError(false), 320);
       return;
     }
     // Пересортировать топ.
@@ -57,14 +62,25 @@ export function VoteButton({
 
   return (
     <button
-      className={`vote${voted ? " voted" : ""}`}
+      className={`vote-pill${voted ? " voted" : ""}${flashError ? " flash-error" : ""}`}
       onClick={toggle}
       disabled={!loggedIn || pending}
       title={loggedIn ? (voted ? "Снять голос" : "Голосовать") : "Войти, чтобы голосовать"}
       aria-pressed={voted}
+      aria-label={`Голосовать за «${titleName}», сейчас ${count} ${pluralGolos(count)}`}
     >
-      <span className="arrow">▲</span>
+      <span className="arrow" aria-hidden="true">
+        ▲
+      </span>
       <span className="count">{count}</span>
     </button>
   );
+}
+
+function pluralGolos(n: number): string {
+  const mod10 = n % 10;
+  const mod100 = n % 100;
+  if (mod10 === 1 && mod100 !== 11) return "голос";
+  if ([2, 3, 4].includes(mod10) && ![12, 13, 14].includes(mod100)) return "голоса";
+  return "голосов";
 }

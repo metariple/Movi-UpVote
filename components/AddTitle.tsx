@@ -1,13 +1,18 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useId, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
 export function AddTitle() {
+  const nameId = useId();
+  const kindId = useId();
+  const yearId = useId();
+
   const [name, setName] = useState("");
   const [kind, setKind] = useState<"movie" | "series">("movie");
   const [year, setYear] = useState("");
+  const [submitting, setSubmitting] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -15,8 +20,9 @@ export function AddTitle() {
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = name.trim();
-    if (!trimmed || pending) return;
+    if (!trimmed || submitting) return;
     setError(null);
+    setSubmitting(true);
 
     const supabase = createClient();
     const {
@@ -34,6 +40,7 @@ export function AddTitle() {
       added_by: user.id,
     });
 
+    setSubmitting(false);
     if (error) {
       setError("Не получилось добавить. Попробуй ещё раз.");
       return;
@@ -43,33 +50,45 @@ export function AddTitle() {
     startTransition(() => router.refresh());
   }
 
+  const busy = submitting || pending;
+
   return (
     <>
-      <form className="add" onSubmit={submit}>
-        <input
-          type="text"
-          placeholder="Название фильма или сериала…"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={200}
-        />
-        <select value={kind} onChange={(e) => setKind(e.target.value as "movie" | "series")}>
-          <option value="movie">фильм</option>
-          <option value="series">сериал</option>
-        </select>
-        <input
-          type="text"
-          inputMode="numeric"
-          placeholder="год"
-          value={year}
-          onChange={(e) => setYear(e.target.value.replace(/\D/g, "").slice(0, 4))}
-          style={{ width: 68 }}
-        />
-        <button className="btn btn-primary" type="submit" disabled={pending || !name.trim()}>
-          Добавить
+      <form className="add-form" onSubmit={submit}>
+        <div className="field field-name">
+          <label htmlFor={nameId}>Название</label>
+          <input
+            id={nameId}
+            type="text"
+            placeholder="Фильм или сериал…"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            maxLength={200}
+          />
+        </div>
+        <div className="field field-kind">
+          <label htmlFor={kindId}>Тип</label>
+          <select id={kindId} value={kind} onChange={(e) => setKind(e.target.value as "movie" | "series")}>
+            <option value="movie">фильм</option>
+            <option value="series">сериал</option>
+          </select>
+        </div>
+        <div className="field field-year">
+          <label htmlFor={yearId}>Год</label>
+          <input
+            id={yearId}
+            type="text"
+            inputMode="numeric"
+            placeholder="год"
+            value={year}
+            onChange={(e) => setYear(e.target.value.replace(/\D/g, "").slice(0, 4))}
+          />
+        </div>
+        <button className="btn btn-primary" type="submit" disabled={busy || !name.trim()}>
+          {submitting ? "Добавляю…" : "Добавить"}
         </button>
       </form>
-      {error && <p style={{ color: "var(--accent)", fontSize: 13, marginTop: -12, marginBottom: 16 }}>{error}</p>}
+      {error && <p className="add-form-error">{error}</p>}
     </>
   );
 }

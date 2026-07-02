@@ -14,12 +14,13 @@
 - **Reference sites:** anthropic.com (тёплый крем + глиняный акцент), эстетика Tiempos/Copernicus (работали от знаний, без live-ресёрча).
 
 ## Typography
-- **Display/Hero:** **Fraunces** (opsz, 500-700) — мягкий оптический литературный серив. Заголовки, masthead, названия тайтлов. Ближайший бесплатный родич Copernicus/Tiempos.
-- **Body:** **Newsreader** (opsz, 400-600) — текстовый серив для чтения. Мета, кнопки, интерфейсный текст.
-- **UI/Labels:** Newsreader (та же семья).
-- **Data/Tables:** Newsreader с `font-variant-numeric: tabular-nums` — счётчики голосов не прыгают при пересортировке. ОБЯЗАТЕЛЬНО на числах.
+- **⚠️ Ревизия 2026-07-03 (dev pass):** Исходный выбор Fraunces + Newsreader **не поддерживает кириллицу** (проверено по unicode-range в реальном CSS от fonts.googleapis.com — только Latin/Vietnamese). Весь русский текст сайта упал бы на системный фолбэк. Заменено на **Alegreya + Lora** — обе полностью поддерживают кириллицу (проверено тем же способом), характер близкий (тёплый литературный серив). Урок: при выборе Google Fonts для нелатинского языка проверять unicode-range фактическим запросом, не полагаться на память/ассоциации.
+- **Display/Hero:** **Alegreya** (400/500/600/700) — тёплый литературный гуманистический серив с книжным характером, ближайший кириллический аналог духа Fraunces. Заголовки, masthead, названия тайтлов.
+- **Body:** **Lora** (400/500/600) — читаемый тёплый текстовый серив, стандарт для русскоязычных редакционных сайтов. Мета, кнопки, интерфейсный текст.
+- **UI/Labels:** Lora (та же семья).
+- **Data/Tables:** Lora с `font-variant-numeric: tabular-nums` — счётчики голосов не прыгают при пересортировке. ОБЯЗАТЕЛЬНО на числах.
 - **Code:** (не применимо для UI; при необходимости — Geist Mono.)
-- **Loading:** Google Fonts. `Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700` + `Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600`. С `display=swap`, `preconnect`.
+- **Loading:** через `next/font/google` (self-host, автоматические fallback-метрики, `subsets: ["cyrillic", "latin"]`). НЕ через `<link>` — next/font устраняет CLS и сам решает подмену на фолбэк.
 - **Scale (px):** meta 14.5 · body 18 · UI 15-16 · title 22 · rank 20 · h1 44. Модульная ~1.2-1.25.
 
 ## Color
@@ -80,9 +81,8 @@
 - **prefers-reduced-motion:** отключать reorder-анимацию и фейды.
 
 ## Font Loading
-- **Стратегия:** `font-display: swap` + `preconnect` к fonts.gstatic.com (в превью уже есть).
-- **Fallback-метрики:** объявить `size-adjust`/`ascent-override` для Georgia-фолбэка обоих serif, чтобы подмена Fraunces/Newsreader→Georgia не дёргала layout (CLS). Или `next/font` (Next.js) — он сам拿 self-host и считает fallback-метрики. **Рекомендуется `next/font/google`** вместо `<link>` в проде.
-- **Вес:** два variable-serif — держать только нужные оси/веса (Fraunces 400-700, Newsreader 400-600), не тянуть все начертания.
+- **Стратегия:** `next/font/google` — self-host, автоматические fallback-метрики (`size-adjust`/`ascent-override` считаются автоматически), `subsets: ["cyrillic","latin"]`, `display: "swap"`.
+- **Вес:** Alegreya 400/500/600/700 · Lora 400/500/600 — только нужные начертания, не всё семейство.
 
 ## User Journey (мини-раскадровка)
 | Шаг | Юзер делает | Чувствует | Что поддерживает |
@@ -104,6 +104,7 @@
 | 2026-07-03 | Пустой топ = тёплое приглашение | /plan-design-review: первое впечатление — фича, не «No items found». |
 | 2026-07-03 | Мобильная форма добавления — стек ≤560px | /plan-design-review: ряд из 4 полей переполняет узкий экран. |
 | 2026-07-03 | Добавлены Interaction States, Responsive, A11y, Font Loading | /plan-design-review: план дизайна доведён с 6/10 до 9/10. |
+| 2026-07-03 | Fraunces+Newsreader → Alegreya+Lora | Dev pass: обнаружено при реализации — исходная пара не поддерживает кириллицу (проверено по unicode-range), весь русский текст ушёл бы на фолбэк. Новая пара полностью кириллична, схожий тёплый литературный характер. |
 
 ## GSTACK REVIEW REPORT
 

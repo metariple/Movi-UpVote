@@ -62,18 +62,23 @@ export default async function Home() {
       {user && <AddTitle />}
 
       {list.length === 0 ? (
-        <p className="empty">
-          {user
-            ? "Пока пусто. Добавь первый фильм или сериал ↑"
-            : "Войди, чтобы увидеть топ и голосовать."}
-        </p>
+        <div className="empty-state">
+          <h2>Здесь будет наш топ</h2>
+          <p>
+            {user
+              ? "Добавь первый фильм или сериал — с него всё начнётся"
+              : "Войди, чтобы увидеть топ и голосовать"}
+          </p>
+          {user && <div className="arrow-up">↑</div>}
+        </div>
       ) : (
-        <ol style={{ listStyle: "none" }}>
+        <ol className="title-list">
           {list.map((t, i) => (
-            <li key={t.id} className="row">
+            <li key={t.id} className="title-row">
               <span className="rank">{i + 1}</span>
               <VoteButton
                 titleId={t.id}
+                titleName={t.name}
                 initialCount={t.vote_count}
                 initialVoted={myVotes.has(t.id)}
                 loggedIn={!!user}

@@ -18,10 +18,11 @@ export function LogoutButton() {
       style={{
         background: "none",
         border: "none",
-        color: "var(--accent)",
+        color: "var(--clay)",
         cursor: "pointer",
         font: "inherit",
         padding: 0,
+        textDecoration: "underline",
       }}
     >
       выйти
