@@ -9,12 +9,12 @@
 
   --error: #b4573f;
 
-  /* Единый Literata на всё (замена Alegreya+Lora — те заменяли Fraunces+
-     Newsreader, которые физически не держат кириллицу). Иерархия display/
-     body теперь через вес и кегль одного семейства, а не смену шрифта. */
-  --font-serif: "Literata", Georgia, serif;
-  --font-display: var(--font-serif);
-  --font-body: var(--font-serif);
+  /* ОРИГИНАЛЬНАЯ связка Fraunces + Newsreader (возвращена по решению автора).
+     Обе НЕ держат кириллицу → Georgia замыкает стек и рендерит русский текст.
+     Латиница (masthead "MoviUpVote") идёт в Fraunces — та самая "десятка".
+     Настоящий фикс кириллицы — отдельная задача (см. DESIGN.md / TODOS). */
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-body: var(--font-newsreader), Georgia, serif;
 
   --radius-sm: 10px;
   --radius-md: 12px;

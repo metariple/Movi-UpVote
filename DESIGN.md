@@ -14,17 +14,18 @@
 - **Reference sites:** anthropic.com (тёплый крем + глиняный акцент), эстетика Tiempos/Copernicus (работали от знаний, без live-ресёрча).
 
 ## Typography
-- **⚠️ Ревизия 2026-07-03 (design-consultation → dev pass → design-review, 3 итерации):**
+- **✅ ФИНАЛ (2026-07-03, решение автора): Fraunces (display) + Newsreader (body)** — оригинальная связка из design-consultation. Автор оценил её на 10/10 и осознанно принял, что кириллица не поддерживается: русский текст рендерится через **Georgia-фолбэк** (замыкает `--font-display`/`--font-body`), латиница (masthead «MoviUpVote») — в Fraunces. `subsets: ["latin"]` в next/font. Настоящая поддержка кириллицы — отдельная задача (TODOS.md: подобрать/сабсетить кириллический шрифт, близкий к Georgia, либо принять Georgia как есть). История ниже сохранена, чтобы не «чинить» это заново.
+- **⚠️ История ревизий (Fraunces → Alegreya → Literata → назад к Fraunces):**
   1. Исходный выбор Fraunces + Newsreader **не поддерживает кириллицу** (проверено по unicode-range в реальном CSS от fonts.googleapis.com — только Latin/Vietnamese). Заменено на Alegreya + Lora.
   2. На живом сайте (`/design-review`) автор указал: текущий шрифт (Alegreya) не нравится, первый вариант (Fraunces) был идеальным. Возражение: «на прототипе он работал без проблем». Доказано рендером без Georgia-фолбэка, что Fraunces **никогда** не показывал кириллицу — превью выглядело нормально только потому, что браузер молча подставлял Georgia на каждую русскую букву (видно по несовпадению веса: латиница жирная/Fraunces, кириллица тонкая/дефолтный серив).
   3. Заменено на **Literata** — единый шрифт на display и body (вместо пары). Причина выбора: тот же механизм `font-optical-sizing: auto` (variable opsz-ось), что даёт Fraunces его характерную «вонки»-пластику, плюс полная поддержка кириллицы. Подтверждено визуальным сравнением на реальном кириллическом тексте (Alegreya/Piazzolla/Literata бок о бок) — Literata ближе всего по духу.
   - **Урок:** при выборе Google Fonts для нелатинского языка — проверять unicode-range фактическим запросом к fonts.googleapis.com, никогда не полагаться на память. И проверять, что «похоже на глаз» превью не маскирует шрифт-фолбэк (сравнивать вес/характер латиницы и кириллицы в одной строке).
-- **Display/Hero:** **Literata** (500/600/700), `font-optical-sizing: auto`. Заголовки, masthead, названия тайтлов.
-- **Body:** **Literata** (400/500), та же семья — иерархия через вес/кегль, не смену шрифта. Мета, кнопки, интерфейсный текст.
-- **UI/Labels:** Literata (та же семья).
-- **Data/Tables:** Literata с `font-variant-numeric: tabular-nums` — счётчики голосов не прыгают при пересортировке. ОБЯЗАТЕЛЬНО на числах.
+- **Display/Hero:** **Fraunces** (variable opsz, `font-optical-sizing: auto`) → Georgia на кириллице. Заголовки, masthead, названия тайтлов.
+- **Body:** **Newsreader** (variable opsz) → Georgia на кириллице. Мета, кнопки, интерфейсный текст.
+- **UI/Labels:** Newsreader → Georgia.
+- **Data/Tables:** Georgia (кириллица) с `font-variant-numeric: tabular-nums` — счётчики голосов не прыгают. ОБЯЗАТЕЛЬНО на числах.
 - **Code:** (не применимо для UI; при необходимости — Geist Mono.)
-- **Loading:** через `next/font/google` (self-host, автоматические fallback-метрики, `subsets: ["cyrillic", "latin"]`, `variable: "--font-serif"`). НЕ через `<link>` — next/font устраняет CLS и сам решает подмену на фолбэк.
+- **Loading:** через `next/font/google` (self-host, `subsets: ["latin"]` для Fraunces/Newsreader, `variable: "--font-fraunces"`/`--font-newsreader`). Georgia дописана в стек CSS-переменных как кириллический фолбэк.
 - **Scale (px):** meta 14.5 · body 18 · UI 15-16 · title 22 · rank 20 · h1 44. Модульная ~1.2-1.25.
 
 ## Color
@@ -112,6 +113,7 @@
 | 2026-07-03 | Alegreya+Lora → Literata (единый шрифт) | /design-review: на живом сайте автору не понравился Alegreya, хотел вернуть Fraunces. Доказано рендером, что Fraunces никогда не рендерил кириллицу даже в превью (молчаливый фолбэк на Georgia). Literata — тот же opsz-механизм, что и у Fraunces, полная кириллица, один шрифт вместо пары. FINDING-001. |
 | 2026-07-03 | `<select>` тип получил appearance:none + кастомная стрелка | /design-review: нативный select игнорировал фон/радиус/шрифт, выглядел не задизайненным на фоне инпутов. FINDING-003. |
 | 2026-07-03 | Лейблы add-form → sr-only, видимая подсказка через placeholder | /design-review: видимые лейблы (добавлены для WCAG в предыдущем ревью) визуально утяжелили форму. sr-only сохраняет доступность, возвращает компактность. FINDING-002. |
+| 2026-07-03 | Literata → назад к Fraunces + Newsreader (ФИНАЛ) | Решение автора: Literata выглядит «дёшево», оригинальная связка была 10/10. Кириллица осознанно на Georgia-фолбэке, настоящий фикс — в TODOS. Отменяет FINDING-001. |
 
 ## GSTACK REVIEW REPORT
 
