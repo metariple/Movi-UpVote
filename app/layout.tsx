@@ -1,22 +1,17 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Alegreya, Lora } from "next/font/google";
+import { Literata } from "next/font/google";
 
-// Display: тёплый литературный серив (замена Fraunces — тот не держит кириллицу).
-const alegreya = Alegreya({
+// Один шрифт на всё (замена Alegreya+Lora, которые в свою очередь заменили
+// Fraunces+Newsreader — те вообще не держат кириллицу). Literata — ближайший
+// работающий аналог характера Fraunces: тот же variable opsz-эффект,
+// мягкий литературный курсив, полная поддержка кириллицы. Иерархия
+// display/body теперь через вес и кегль одного семейства, не через смену шрифта.
+const literata = Literata({
   subsets: ["cyrillic", "latin"],
   weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
-  variable: "--font-display",
-  display: "swap",
-});
-
-// Body/UI: читаемый текстовый серив (замена Newsreader — та же причина).
-const lora = Lora({
-  subsets: ["cyrillic", "latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-body",
+  variable: "--font-serif",
   display: "swap",
 });
 
@@ -27,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ru" className={`${alegreya.variable} ${lora.variable}`}>
+    <html lang="ru" className={literata.variable}>
       <body>{children}</body>
     </html>
   );

@@ -9,8 +9,12 @@
 
   --error: #b4573f;
 
-  --font-display: "Alegreya", Georgia, serif;
-  --font-body: "Lora", Georgia, serif;
+  /* Единый Literata на всё (замена Alegreya+Lora — те заменяли Fraunces+
+     Newsreader, которые физически не держат кириллицу). Иерархия display/
+     body теперь через вес и кегль одного семейства, а не смену шрифта. */
+  --font-serif: "Literata", Georgia, serif;
+  --font-display: var(--font-serif);
+  --font-body: var(--font-serif);
 
   --radius-sm: 10px;
   --radius-md: 12px;
@@ -32,6 +36,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
+  font-optical-sizing: auto; /* variable opsz-ось Literata — "вонки"-эффект Fraunces */
   font-size: 18px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
