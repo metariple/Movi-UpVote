@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { VoteButton } from "@/components/VoteButton";
 import { AddTitle } from "@/components/AddTitle";
+import { EditableTitleRow } from "@/components/EditableTitleRow";
 import { LogoutButton } from "@/components/LogoutButton";
 
 export const dynamic = "force-dynamic";
@@ -11,6 +12,7 @@ type TitleRow = {
   name: string;
   kind: "movie" | "series";
   year: number | null;
+  added_by: string;
   added_by_name: string;
   vote_count: number;
 };
@@ -26,7 +28,7 @@ export default async function Home() {
   // но не пишет — см. supabase/seed.sql, блок "Round 2a").
   const { data: titles } = await supabase
     .from("titles_with_vote_counts")
-    .select("id, name, kind, year, added_by_name, vote_count");
+    .select("id, name, kind, year, added_by, added_by_name, vote_count");
 
   // Какие тайтлы уже поддержал текущий юзер — для подсветки кнопки.
   let myVotes = new Set<number>();
@@ -68,7 +70,7 @@ export default async function Home() {
           <p>
             {user
               ? "Добавь первый фильм или сериал — с него всё начнётся"
-              : "Войди, чтобы увидеть топ и голосовать"}
+              : "Пока пусто — здесь появится топ, как только кто-то добавит первый тайтл"}
           </p>
           {user && <div className="arrow-up">↑</div>}
         </div>
@@ -84,13 +86,14 @@ export default async function Home() {
                 initialVoted={myVotes.has(t.id)}
                 loggedIn={!!user}
               />
-              <div className="title-main">
-                <div className="title-name">{t.name}</div>
-                <div className="title-meta">
-                  {t.kind === "series" ? "сериал" : "фильм"}
-                  {t.year ? ` · ${t.year}` : ""} · добавил {t.added_by_name}
-                </div>
-              </div>
+              <EditableTitleRow
+                titleId={t.id}
+                name={t.name}
+                kind={t.kind}
+                year={t.year}
+                addedByName={t.added_by_name}
+                isOwner={user?.id === t.added_by}
+              />
             </li>
           ))}
         </ol>

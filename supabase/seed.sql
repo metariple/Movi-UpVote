@@ -119,6 +119,21 @@ create policy "profiles readable by anon"
 revoke select on public.profiles from anon;
 grant select (id, display_name) on public.profiles to anon;
 
+-- ═════════════════════════════════════════════════════════════
+-- Round 2b (2026-07-10): редактирование своих тайтлов.
+-- Применить отдельно через Supabase SQL Editor (см. примечание
+-- к блоку Round 2a выше — не перезапускать весь файл).
+--
+-- USING и WITH CHECK на одном и том же предикате — USING одно
+-- гейтит, какие строки видны для UPDATE, но не то, чем они могут
+-- стать в результате. Без WITH CHECK ничто не мешает через тот же
+-- UPDATE переписать added_by на чужой id.
+-- ═════════════════════════════════════════════════════════════
+create policy "user edits own title"
+  on public.titles for update to authenticated
+  using (added_by = auth.uid())
+  with check (added_by = auth.uid());
+
 -- ─────────────────────────────────────────────────────────────
 -- Стартовые тайтлы засеваются после первого логина автора
 -- (нужен реальный added_by = profiles.id). Пример вставки:

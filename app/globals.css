@@ -291,6 +291,23 @@ ol.title-list {
   font-size: 14.5px;
   margin-top: 3px;
 }
+.edit-link {
+  font: inherit;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  vertical-align: middle;
+}
+.edit-link:hover {
+  color: var(--ink);
+}
 
 /* ── Empty state — тёплое приглашение, не "No items found" ─ */
 .empty-state {
