@@ -107,6 +107,8 @@ a.who:focus-visible {
 .btn {
   font: inherit;
   font-family: var(--font-body);
+  font-size: 16px; /* UI-scale (DESIGN.md: "UI 15-16"), не body 18px — иначе
+                       кнопка на 3px выше соседних input/select в одном ряду */
   cursor: pointer;
   border-radius: var(--radius-sm);
   border: 1px solid var(--line);
