@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { VoteButton } from "@/components/VoteButton";
-import { AddTitle } from "@/components/AddTitle";
+import { AddTitleSearch } from "@/components/AddTitleSearch";
 import { EditableTitleRow } from "@/components/EditableTitleRow";
 import { LogoutButton } from "@/components/LogoutButton";
 
@@ -62,7 +62,7 @@ export default async function Home() {
         <p className="tag">Добавляй фильмы и сериалы, голосуй за любимые — топ складывается сам.</p>
       </header>
 
-      {user && <AddTitle />}
+      {user && <AddTitleSearch />}
 
       {list.length === 0 ? (
         <div className="empty-state">
