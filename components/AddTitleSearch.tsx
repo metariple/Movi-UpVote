@@ -99,19 +99,21 @@ export function AddTitleSearch() {
 
   return (
     <div className="add-search">
-      <div className="field field-name">
-        <label htmlFor="title-search">Название</label>
-        <input
-          id="title-search"
-          type="text"
-          placeholder="Начни печатать название…"
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setShowAddForm(false);
-          }}
-        />
-      </div>
+      {!showAddForm && (
+        <div className="field field-name">
+          <label htmlFor="title-search">Название</label>
+          <input
+            id="title-search"
+            type="text"
+            placeholder="Начни печатать название…"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setShowAddForm(false);
+            }}
+          />
+        </div>
+      )}
 
       {query.trim() && !showAddForm && (
         <div className="search-results">
