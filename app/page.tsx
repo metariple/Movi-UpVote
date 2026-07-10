@@ -22,7 +22,8 @@ export default async function Home() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Топ из view (RLS: только для залогиненных; аноним получит пусто).
+  // Топ из view (RLS: анон читает titles/votes/profiles(display_name),
+  // но не пишет — см. supabase/seed.sql, блок "Round 2a").
   const { data: titles } = await supabase
     .from("titles_with_vote_counts")
     .select("id, name, kind, year, added_by_name, vote_count");
@@ -56,7 +57,7 @@ export default async function Home() {
 
       <header className="masthead">
         <h1>23 Films</h1>
-        <p className="tag">Что смотрит наша тусовка. Голосуй — поднимай в топ.</p>
+        <p className="tag">Добавляй фильмы и сериалы, голосуй за любимые — топ складывается сам.</p>
       </header>
 
       {user && <AddTitle />}

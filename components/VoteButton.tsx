@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -17,6 +18,36 @@ export function VoteButton({
   initialVoted: boolean;
   loggedIn: boolean;
 }) {
+  if (!loggedIn) {
+    return (
+      <Link
+        href="/login"
+        className="vote-pill vote-pill-cta"
+        aria-label={`Войти, чтобы голосовать за «${titleName}», сейчас ${initialCount} ${pluralGolos(initialCount)}`}
+        title="Войти, чтобы голосовать"
+      >
+        <span className="arrow" aria-hidden="true">
+          ▲
+        </span>
+        <span className="count">{initialCount}</span>
+      </Link>
+    );
+  }
+
+  return <VoteButtonInteractive {...{ titleId, titleName, initialCount, initialVoted }} />;
+}
+
+function VoteButtonInteractive({
+  titleId,
+  titleName,
+  initialCount,
+  initialVoted,
+}: {
+  titleId: number;
+  titleName: string;
+  initialCount: number;
+  initialVoted: boolean;
+}) {
   const [count, setCount] = useState(initialCount);
   const [voted, setVoted] = useState(initialVoted);
   const [flashError, setFlashError] = useState(false);
@@ -24,7 +55,7 @@ export function VoteButton({
   const router = useRouter();
 
   async function toggle() {
-    if (!loggedIn || pending) return;
+    if (pending) return;
 
     const supabase = createClient();
     const {
@@ -64,8 +95,8 @@ export function VoteButton({
     <button
       className={`vote-pill${voted ? " voted" : ""}${flashError ? " flash-error" : ""}`}
       onClick={toggle}
-      disabled={!loggedIn || pending}
-      title={loggedIn ? (voted ? "Снять голос" : "Голосовать") : "Войти, чтобы голосовать"}
+      disabled={pending}
+      title={voted ? "Снять голос" : "Голосовать"}
       aria-pressed={voted}
       aria-label={`Голосовать за «${titleName}», сейчас ${count} ${pluralGolos(count)}`}
     >

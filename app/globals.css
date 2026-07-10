@@ -163,16 +163,13 @@ body {
   outline: 2px solid var(--clay);
   outline-offset: 1px;
 }
-.add-form .field-year input {
-  width: 76px;
-}
 .add-form-error {
   color: var(--error);
   font-size: 13.5px;
   margin: -20px 0 20px;
 }
 
-/* Responsive: стек на узком экране — ряд из 4 полей переполняет 375px */
+/* Responsive: стек на узком экране — ряд из полей переполняет 375px */
 @media (max-width: 560px) {
   .add-form {
     flex-wrap: wrap;
@@ -180,8 +177,7 @@ body {
   .add-form .field-name {
     flex-basis: 100%;
   }
-  .add-form .field-kind,
-  .add-form .field-year {
+  .add-form .field-kind {
     flex: 1;
   }
 }
@@ -254,6 +250,14 @@ ol.title-list {
 .vote-pill:disabled {
   cursor: not-allowed;
   opacity: 0.55;
+}
+.vote-pill-cta {
+  text-decoration: none;
+  border-style: dashed;
+  border-color: var(--clay);
+}
+.vote-pill-cta:hover {
+  background: var(--voted);
 }
 .vote-pill:focus-visible {
   outline: 2px solid var(--clay);

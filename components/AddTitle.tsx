@@ -7,11 +7,9 @@ import { createClient } from "@/lib/supabase/client";
 export function AddTitle() {
   const nameId = useId();
   const kindId = useId();
-  const yearId = useId();
 
   const [name, setName] = useState("");
   const [kind, setKind] = useState<"movie" | "series">("movie");
-  const [year, setYear] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -36,7 +34,7 @@ export function AddTitle() {
     const { error } = await supabase.from("titles").insert({
       name: trimmed,
       kind,
-      year: year ? Number(year) : null,
+      year: null,
       added_by: user.id,
     });
 
@@ -46,7 +44,6 @@ export function AddTitle() {
       return;
     }
     setName("");
-    setYear("");
     startTransition(() => router.refresh());
   }
 
@@ -72,17 +69,6 @@ export function AddTitle() {
             <option value="movie">фильм</option>
             <option value="series">сериал</option>
           </select>
-        </div>
-        <div className="field field-year">
-          <label htmlFor={yearId}>Год</label>
-          <input
-            id={yearId}
-            type="text"
-            inputMode="numeric"
-            placeholder="год"
-            value={year}
-            onChange={(e) => setYear(e.target.value.replace(/\D/g, "").slice(0, 4))}
-          />
         </div>
         <button className="btn btn-primary" type="submit" disabled={busy || !name.trim()}>
           {submitting ? "Добавляю…" : "Добавить"}

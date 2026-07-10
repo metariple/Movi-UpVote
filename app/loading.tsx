@@ -7,7 +7,7 @@ export default function Loading() {
       </div>
       <header className="masthead">
         <h1>23 Films</h1>
-        <p className="tag">Что смотрит наша тусовка. Голосуй — поднимай в топ.</p>
+        <p className="tag">Добавляй фильмы и сериалы, голосуй за любимые — топ складывается сам.</p>
       </header>
       {Array.from({ length: 5 }).map((_, i) => (
         <div className="skeleton-row" key={i}>

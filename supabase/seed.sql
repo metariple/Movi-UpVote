@@ -91,6 +91,34 @@ create policy "user votes as self"
 create policy "user removes own vote"
   on public.votes for delete to authenticated using (user_id = auth.uid());
 
+-- ═════════════════════════════════════════════════════════════
+-- Round 2a (2026-07-10): анонимный читает топ, не голосует.
+-- ВАЖНО — этот блок НЕ перезапускать вместе с остальным seed.sql
+-- (политики authenticated выше уже применены на живой базе).
+-- Применить отдельно через Supabase SQL Editor.
+--
+-- titles_with_vote_counts — security_invoker VIEW с INNER JOIN на
+-- profiles. Если из трёх грантов ниже забыть хотя бы один — анон
+-- тихо получит 0 строк (JOIN отфильтрует), БЕЗ ошибки. Проверять
+-- анон-доступ к titles/votes/profiles по ОТДЕЛЬНОСТИ, не только
+-- через сам view.
+-- ═════════════════════════════════════════════════════════════
+create policy "titles readable by anon"
+  on public.titles for select to anon using (true);
+
+create policy "votes readable by anon"
+  on public.votes for select to anon using (true);
+
+-- profiles: RLS-политика гейтит СТРОКИ (какие профили видны анониму),
+-- а не КОЛОНКИ. Чтобы анон видел только display_name (не расширялось
+-- бы само, добавь profiles новую чувствительную колонку) — колоночный
+-- GRANT поверх RLS-политики, а не "урезанная" политика (RLS не умеет
+-- отдавать одну колонку).
+create policy "profiles readable by anon"
+  on public.profiles for select to anon using (true);
+revoke select on public.profiles from anon;
+grant select (id, display_name) on public.profiles to anon;
+
 -- ─────────────────────────────────────────────────────────────
 -- Стартовые тайтлы засеваются после первого логина автора
 -- (нужен реальный added_by = profiles.id). Пример вставки:
