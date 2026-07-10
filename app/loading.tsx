@@ -1,11 +1,10 @@
 export default function Loading() {
   return (
     <main className="wrap">
-      <div className="topbar">
-        <div />
-        <div />
-      </div>
       <header className="masthead">
+        <div className="topbar">
+          <div />
+        </div>
         <h1>23 Films</h1>
         <p className="tag">Добавляй фильмы и сериалы, голосуй за любимые — топ складывается сам.</p>
       </header>

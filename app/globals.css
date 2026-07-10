@@ -48,23 +48,18 @@ body {
   padding: 40px 24px 96px;
 }
 
-/* ── Topbar ─────────────────────────────────────────── */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 40px;
+/* ── Masthead ───────────────────────────────────────── */
+.masthead {
+  position: relative;
 }
 
-/* ── Masthead ───────────────────────────────────────── */
 .masthead h1 {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 44px;
   line-height: 1.05;
   letter-spacing: -0.01em;
+  padding-right: 90px; /* держит место под .topbar, не даёт длинному имени наехать */
 }
 
 .masthead .tag {
@@ -72,6 +67,33 @@ body {
   font-size: 17px;
   font-style: italic;
   margin-top: 8px;
+}
+
+/* Топбар привязан к masthead (единственный заголовочный блок в системе),
+   а не плавает отдельной полосой — иначе на широких экранах "Войти"
+   висит в одиночестве в пустой бумаге, оторванный от колонки. */
+.topbar {
+  position: absolute;
+  top: 4px;
+  right: 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.who {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  justify-content: flex-end;
+  padding: 0 4px;
+  color: var(--muted);
+  text-decoration: none;
+}
+a.who:hover,
+a.who:focus-visible {
+  color: var(--clay);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .rule {

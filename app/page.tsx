@@ -44,20 +44,18 @@ export default async function Home() {
 
   return (
     <main className="wrap">
-      <div className="topbar">
-        <div />
-        {user ? (
-          <span className="who">
-            {user.user_metadata?.full_name ?? user.email} · <LogoutButton />
-          </span>
-        ) : (
-          <Link href="/login" className="who">
-            Войти
-          </Link>
-        )}
-      </div>
-
       <header className="masthead">
+        <div className="topbar">
+          {user ? (
+            <span className="who">
+              {user.user_metadata?.full_name ?? user.email} · <LogoutButton />
+            </span>
+          ) : (
+            <Link href="/login" className="who">
+              Войти
+            </Link>
+          )}
+        </div>
         <h1>23 Films</h1>
         <p className="tag">Добавляй фильмы и сериалы, голосуй за любимые — топ складывается сам.</p>
       </header>
